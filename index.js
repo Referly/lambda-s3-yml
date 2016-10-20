@@ -19,7 +19,7 @@ module.exports = function(bucket, path, filename, callback) {
                 var doc = yaml.safeLoad(data.Body);
                 callback(null, doc);
             } catch (e) {
-                callback(err, "error reading yml file"); // an error occurred reading the yml file
+                callback(e, "error reading yml file"); // an error occurred reading the yml file
             }
         }
     });
