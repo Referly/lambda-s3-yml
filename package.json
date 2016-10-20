@@ -1,6 +1,6 @@
 {
   "name": "lambda-s3-yml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Access yml files from S3 as JS objects",
   "main": "index.js",
   "scripts": {
