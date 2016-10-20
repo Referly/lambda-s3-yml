@@ -5,5 +5,9 @@ Access yml files from S3 as JS objects
 
 ```js
 const s3EnvVars = require('s3-env-vars');
-var doc = s3EnvVars("mybucketname", "folderpathinbucket", "filename", function(err) { console.log(err); });
+const s3EnvVars = require('s3-env-vars');
+s3EnvVars("mybucketname", "folderpathinbucket", "filename", function(err, data) {
+   if(err) console.log(err);
+   else console.log(data);
+});
 ```
