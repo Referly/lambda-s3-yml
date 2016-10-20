@@ -1,0 +1,23 @@
+{
+  "name": "lambda-s3-yml",
+  "version": "1.0.0",
+  "description": "Access yml files from S3 as JS objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Referly/lambda-s3-yml.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Referly/lambda-s3-yml/issues"
+  },
+  "homepage": "https://github.com/Referly/lambda-s3-yml#readme",
+  "dependencies": {
+    "aws-sdk": "^2.6.10",
+    "js-yaml": "^3.6.1"
+  }
+}
