@@ -15,7 +15,7 @@ module.exports = function(bucket, path, filename, errHandler) {
             try {
                 console.log('info: ', "Retrieved s3 object.");
                 var doc = yaml.safeLoad(data.Body);
-                console.log('data: ', "yml file contents < " + doc + " >");
+                console.log('data: ', "yml file contents: ", doc);
                 return doc;
             } catch (e) {
                 errHandler(err); // an error occurred reading the yml file
