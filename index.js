@@ -16,14 +16,11 @@ module.exports = function(bucket, path, filename, callback) {
         if (err) callback(err, err.stack); // an error occurred
         else {
             try {
-                console.log('info: ', "Retrieved s3 object.");
                 var doc = yaml.safeLoad(data.Body);
-                console.log('data: ', "yml file contents: ", doc);
                 callback(null, doc);
             } catch (e) {
                 callback(err, err.stack); // an error occurred reading the yml file
             }
         }
     });
-
 };
