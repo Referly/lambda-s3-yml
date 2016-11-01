@@ -8,6 +8,21 @@ var yaml = require('js-yaml');
 //   else console.log(data);
 // });
 module.exports = function(bucket, path, filename, callback) {
+    function DynamicEnvVars(doc) {
+        var baseDoc = doc;
+
+        this.baseDoc = function() {
+          return baseDoc;
+        };
+
+        this.get = function(key) {
+          return this.baseDoc()[key];
+        };
+
+        this.path = function(pathStr) {
+
+        };
+    }
     var s3Params = {
         Bucket: bucket,
         Key: path + "/" + filename
@@ -17,7 +32,7 @@ module.exports = function(bucket, path, filename, callback) {
         else {
             try {
                 var doc = yaml.safeLoad(data.Body);
-                callback(null, doc);
+                callback(null, new DynamicEnvVars(doc));
             } catch (e) {
                 callback(e, "error reading yml file"); // an error occurred reading the yml file
             }
