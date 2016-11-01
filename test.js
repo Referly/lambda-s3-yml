@@ -57,6 +57,16 @@ s3EnvVars(S3_ENV_VAR_BUCKET, S3_ENV_VAR_BASE_PATH, S3_ENV_VAR_FILENAME, function
 
         pass = pass && runner.testPath('tom.friend', '.', 'jerry', "Walk simple hash path");
 
+        pass = pass && runner.testGet('@cat-name@', 'tom', 'Simple');
+
+        pass = pass && runner.testPath('cat-name', undefined, 'tom', 'The top level path lookup.');
+
+        pass = pass && runner.testPath('@cat-name@', undefined, 'tom', 'Top level path lookup with alias.');
+
+        pass = pass && runner.testPath('jerry-friend', undefined, 'tom', 'Top level path lookup with alias for value.');
+
+        pass = pass && runner.testPath('tom.name', undefined, 'tom', "Walk hash path and resolve top level @alias@");
+
         if(pass) {
             console.log("SUCCESS ALL TESTS PASSED.");
         } else {
