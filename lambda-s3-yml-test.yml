@@ -8,4 +8,4 @@ tom:
 jerry:
   friend:
     species: cat
-tom-species: '@jerry.friend.species@'
+tom-species: '@jerry@.friend.species'

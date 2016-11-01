@@ -54,21 +54,21 @@ function test(doc) {
     pass = pass && runner.testGet('literal-dot', 'LITERAL.DOT', 'Do not treat literal dot as a namespace seperator');
 
     pass = pass && runner.testGet('jerry-friend', 'tom', "Resolve top level @alias@");
-
-    pass = pass && runner.testPath('tom.friend', '.', 'jerry', "Walk simple hash path");
-
-    pass = pass && runner.testGet('@cat-name@', 'tom', 'Simple');
-
-    pass = pass && runner.testPath('cat-name', undefined, 'tom', 'The top level path lookup.');
-
-    pass = pass && runner.testPath('@cat-name@', undefined, 'tom', 'Top level path lookup with alias.');
-
-    pass = pass && runner.testPath('jerry-friend', undefined, 'tom', 'Top level path lookup with alias for value.');
-
-    pass = pass && runner.testPath('tom.name', undefined, 'tom', "Walk hash path and resolve top level @alias@");
-
-    pass = pass && runner.testPath('jerry.friend.species', undefined, 'cat', "Walk down two hashes");
-
+    //
+    //pass = pass && runner.testPath('tom.friend', '.', 'jerry', "Walk simple hash path");
+    //
+    //pass = pass && runner.testGet('@cat-name@', 'tom', 'Simple');
+    //
+    //pass = pass && runner.testPath('cat-name', undefined, 'tom', 'The top level path lookup.');
+    //
+    //pass = pass && runner.testPath('@cat-name@', undefined, 'tom', 'Top level path lookup with alias.');
+    //
+    //pass = pass && runner.testPath('jerry-friend', undefined, 'tom', 'Top level path lookup with alias for value.');
+    //
+    //pass = pass && runner.testPath('tom.name', undefined, 'tom', "Walk hash path and resolve top level @alias@");
+    //
+    //pass = pass && runner.testPath('jerry.friend.species', undefined, 'cat', "Walk down two hashes");
+    //
     //pass = pass && runner.testGet('tom-species', 'cat', 'Alias look up of two depth hash');
 
     if (pass) {

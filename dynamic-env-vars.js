@@ -10,11 +10,34 @@ module.exports = function DynamicEnvVars(doc, parent) {
         return parentEnvVars;
     };
 
+    this.normalizeStr = function(str, delimeter) {
+        var aliasRegex = /(@)(.+)(@)/;
+        var matches = str.match(aliasRegex);
+        if (matches) {
+            var replacement = this.path(matches[2], delimeter);
+            str = str.replace(aliasRegex, replacement);
+            return this.normalizeStr(str, delimeter);
+        }
+        return str;
+    };
+
+    this.path = function(pathStr, delimeter) {
+
+    };
+
     this._get = function(key) {
         return this.baseDoc()[key];
     };
 
-    this.get = function(key) {
+    this.get = function(key, delimeter) {
+        var val = this._get(key);
+        var aliasRegex = /(@)(.+)(@)/;
+        if(typeof val == 'string') {
+           var matches = val.match(aliasRegex);
+        }
+    };
+
+    this.getOld = function(key) {
         console.log("ENTERED GET with key => ", key);
         console.log("Length of the key => ", key.length);
         var replacementExpr = /(@)(.+)(@)/;
@@ -40,7 +63,7 @@ module.exports = function DynamicEnvVars(doc, parent) {
         return str;
     };
 
-    this.path = function(pathStr, delimeter) {
+    this.pathOld = function(pathStr, delimeter) {
         //console.log("in path", pathStr, delimeter);
         var finalDelimeter = delimeter;
         if(!finalDelimeter) {
