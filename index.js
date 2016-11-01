@@ -24,17 +24,37 @@ module.exports = function(bucket, path, filename, callback) {
             //console.log("key => ", key);
             var str = this._get(key);
             //console.log("str => ", str);
-            var matches = str.match(replacementExpr);
-            if(matches) {
-                //console.log("matches => ", matches);
-                var replacement = this.get(matches[2]);
-                str = str.replace(replacementExpr, replacement);
+            if(typeof str == 'string') {
+                var matches = str.match(replacementExpr);
+                if (matches) {
+                    //console.log("matches => ", matches);
+                    var replacement = this.get(matches[2]);
+                    str = str.replace(replacementExpr, replacement);
+                }
             }
             return str;
         };
 
-        this.path = function(pathStr) {
-
+        this.path = function(pathStr, delimeter) {
+            //console.log("in path", pathStr, delimeter);
+            var finalDelimeter = delimeter;
+            if(!finalDelimeter) {
+                finalDelimeter = '.';
+            }
+            var splitPath = pathStr.split(finalDelimeter);
+            if(splitPath.length == 0) {
+                return this.get();
+            }
+            var currentKey = splitPath.shift();
+            //console.log("length of splitPath =>", splitPath.length);
+            if(splitPath.length == 0) {
+                return this.get(currentKey)
+            } else {
+                //console.log("current key is ", currentKey);
+                //console.log("about to create subVars with =>", this.get(currentKey));
+                var subVars = new DynamicEnvVars(this.get(currentKey));
+                return subVars.path(splitPath.join(finalDelimeter), finalDelimeter);
+            }
         };
     }
     var s3Params = {
