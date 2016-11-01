@@ -1,0 +1,11 @@
+BEARER_TOKEN: secret
+literal-dot: 'LITERAL.DOT'
+cat-name: tom
+jerry-friend: '@cat-name@'
+tom:
+  friend: jerry
+  name: '@cat-name@'
+jerry:
+  friend:
+    species: cat
+tom-species: '@jerry.friend.species@'

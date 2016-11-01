@@ -1,7 +1,6 @@
-const s3EnvVars = require('./index');
-const S3_ENV_VAR_BUCKET='mattermark-public-testing';
-const S3_ENV_VAR_BASE_PATH='lambda-s3-yml';
-const S3_ENV_VAR_FILENAME='lambda-s3-yml-test.yml';
+const fs = require('fs');
+const yaml = require('js-yaml');
+const DynamicEnvVars = require('./dynamic-env-vars');
 
 function TestRunner(dynamicEnvVars) {
     var envVars = dynamicEnvVars;
@@ -39,39 +38,42 @@ function TestRunner(dynamicEnvVars) {
         return false;
     }
 }
-
-s3EnvVars(S3_ENV_VAR_BUCKET, S3_ENV_VAR_BASE_PATH, S3_ENV_VAR_FILENAME, function(err, data) {
-    if (err) {
-        console.log('FAILED TO LOAD TEST', err);
-    }
-    else {
-        console.log('SUCCESS LOADING TESTS');
-        var pass = true;
-        var runner = new TestRunner(data);
-
-        pass = pass && runner.testGet('BEARER_TOKEN', 'secret', 'Retrieve simple value for string');
-
-        pass = pass && runner.testGet('literal-dot', 'LITERAL.DOT', 'Do not treat literal dot as a namespace seperator');
-
-        pass = pass && runner.testGet('jerry-friend', 'tom', "Resolve top level @alias@");
-
-        pass = pass && runner.testPath('tom.friend', '.', 'jerry', "Walk simple hash path");
-
-        pass = pass && runner.testGet('@cat-name@', 'tom', 'Simple');
-
-        pass = pass && runner.testPath('cat-name', undefined, 'tom', 'The top level path lookup.');
-
-        pass = pass && runner.testPath('@cat-name@', undefined, 'tom', 'Top level path lookup with alias.');
-
-        pass = pass && runner.testPath('jerry-friend', undefined, 'tom', 'Top level path lookup with alias for value.');
-
-        pass = pass && runner.testPath('tom.name', undefined, 'tom', "Walk hash path and resolve top level @alias@");
-
-        if(pass) {
-            console.log("SUCCESS ALL TESTS PASSED.");
-        } else {
-            console.log("FAILURE: ONE OR MORE TEST FAILED.");
-        }
-
-    }
+fs.readFile('lambda-s3-yml-test.yml', function(err, data) {
+    if (err) throw err;
+    test(yaml.safeLoad(data));
 });
+
+function test(doc) {
+    var envVars = new DynamicEnvVars(doc);
+    console.log('SUCCESS LOADING TESTS');
+    var pass = true;
+    var runner = new TestRunner(envVars);
+
+    pass = pass && runner.testGet('BEARER_TOKEN', 'secret', 'Retrieve simple value for string');
+
+    pass = pass && runner.testGet('literal-dot', 'LITERAL.DOT', 'Do not treat literal dot as a namespace seperator');
+
+    pass = pass && runner.testGet('jerry-friend', 'tom', "Resolve top level @alias@");
+
+    pass = pass && runner.testPath('tom.friend', '.', 'jerry', "Walk simple hash path");
+
+    pass = pass && runner.testGet('@cat-name@', 'tom', 'Simple');
+
+    pass = pass && runner.testPath('cat-name', undefined, 'tom', 'The top level path lookup.');
+
+    pass = pass && runner.testPath('@cat-name@', undefined, 'tom', 'Top level path lookup with alias.');
+
+    pass = pass && runner.testPath('jerry-friend', undefined, 'tom', 'Top level path lookup with alias for value.');
+
+    pass = pass && runner.testPath('tom.name', undefined, 'tom', "Walk hash path and resolve top level @alias@");
+
+    pass = pass && runner.testPath('jerry.friend.species', undefined, 'cat', "Walk down two hashes");
+
+    //pass = pass && runner.testGet('tom-species', 'cat', 'Alias look up of two depth hash');
+
+    if (pass) {
+        console.log("SUCCESS ALL TESTS PASSED.");
+    } else {
+        console.log("FAILURE: ONE OR MORE TEST FAILED.");
+    }
+}
