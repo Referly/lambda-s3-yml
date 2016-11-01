@@ -12,11 +12,25 @@ module.exports = function(bucket, path, filename, callback) {
         var baseDoc = doc;
 
         this.baseDoc = function() {
-          return baseDoc;
+            return baseDoc;
+        };
+
+        this._get = function(key) {
+            return this.baseDoc()[key];
         };
 
         this.get = function(key) {
-          return this.baseDoc()[key];
+            var replacementExpr = /(@)(.+)(@)/;
+            //console.log("key => ", key);
+            var str = this._get(key);
+            //console.log("str => ", str);
+            var matches = str.match(replacementExpr);
+            if(matches) {
+                //console.log("matches => ", matches);
+                var replacement = this.get(matches[2]);
+                str = str.replace(replacementExpr, replacement);
+            }
+            return str;
         };
 
         this.path = function(pathStr) {
